@@ -34,6 +34,7 @@ const invoices = [
   },
   {
     file: 'invoice-atlas.jpg',
+    pdf: true,
     accent: '#7a2e8e',
     vendor: ['Atlas Cloud Consulting Inc.', '901 Market Street, Suite 400, San Francisco, CA 94103', 'accounts@atlascloud.io'],
     customer: ['Redwood Retail Group', 'Accounts Payable, James Carter', '55 Pine Avenue, Portland, OR 97204'],
@@ -138,5 +139,12 @@ for (const inv of invoices) {
   const out = path.join(outDir, inv.file);
   await page.screenshot({ path: out, type: 'jpeg', quality: 85, fullPage: true });
   console.log(`${path.relative(root, out)}  ${Math.round(fs.statSync(out).size / 1024)} KB`);
+  if (inv.pdf) {
+    // a real digital PDF (with a text layer) for the demo's no-OCR path
+    const height = await page.evaluate(() => document.documentElement.scrollHeight);
+    const pdfOut = path.join(outDir, inv.file.replace(/\.jpg$/, '.pdf'));
+    await page.pdf({ path: pdfOut, width: '1000px', height: `${height + 2}px`, printBackground: true, pageRanges: '1' });
+    console.log(`${path.relative(root, pdfOut)}  ${Math.round(fs.statSync(pdfOut).size / 1024)} KB`);
+  }
 }
 await browser.close();

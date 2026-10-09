@@ -2,9 +2,11 @@
 // The OCR engines and the extractor are imported only when someone presses Run.
 
 const ENGINES = {
+  pdf: { label: 'PDF text layer', size: 'no download', load: null },
   paddle: { label: 'PaddleOCR', size: '≈10 MB', load: () => import('./paddle.js').then((m) => m.recognizeWithPaddle) },
   tesseract: { label: 'Tesseract', size: '≈4 MB', load: () => import('./tesseract.js').then((m) => m.recognizeWithTesseract) },
 };
+const isPdf = (blob, name = '') => blob.type === 'application/pdf' || /\.pdf$/i.test(name);
 const MAX_SIDE = 2000; // phone photos are downscaled before OCR
 
 const fmtMoney = (v, cur) => {
@@ -31,16 +33,42 @@ export function mountDemo(root, { onBusy = () => {} } = {}) {
   const results = $('[data-results]');
   const fileInput = $('[data-upload]');
 
-  let source = null; // canvas holding the image at OCR resolution
+  let source = null; // canvas holding the page at OCR resolution
   let sourceName = '';
+  let pdfText = null; // text-layer segments when the source is a digital PDF
   let engine = 'paddle';
   let result = null; // { ocr, data, engine, ms }
   let highlight = new Set();
   let busy = false;
 
-  // ---------- image loading ----------
+  const engineInputs = [...root.querySelectorAll('[name="engine"]')];
+  const pdfOption = engineInputs.find((i) => i.value === 'pdf');
+  engineInputs.forEach((input) => input.addEventListener('change', () => (engine = input.value)));
+  const selectEngine = (value) => {
+    engine = value;
+    engineInputs.forEach((i) => (i.checked = i.value === value));
+  };
 
-  async function loadImage(blob, name) {
+  // ---------- loading images and PDFs ----------
+
+  function setSource(canvasEl, name, { text = null, note = '' } = {}) {
+    source = canvasEl;
+    sourceName = name;
+    pdfText = text;
+    result = null;
+    highlight = new Set();
+    // the text-layer option only exists for digital PDFs
+    pdfOption.disabled = !text;
+    pdfOption.closest('label').hidden = !text;
+    if (text) selectEngine('pdf');
+    else if (engine === 'pdf') selectEngine('paddle');
+    renderResults();
+    draw();
+    setStatus(note || `Ready: ${name}. Pick an engine and run.`);
+    runBtn.disabled = false;
+  }
+
+  async function imageToCanvas(blob) {
     const bitmap = await createImageBitmap(blob);
     const scale = Math.min(1, MAX_SIDE / Math.max(bitmap.width, bitmap.height));
     const c = document.createElement('canvas');
@@ -51,36 +79,47 @@ export function mountDemo(root, { onBusy = () => {} } = {}) {
     g.fillRect(0, 0, c.width, c.height);
     g.drawImage(bitmap, 0, 0, c.width, c.height);
     bitmap.close?.();
-    source = c;
-    sourceName = name;
-    result = null;
-    highlight = new Set();
-    renderResults();
-    draw();
-    setStatus(`Ready: ${name}. Pick an engine and run.`);
-    runBtn.disabled = false;
+    return c;
+  }
+
+  async function loadFile(blob, name) {
+    try {
+      if (isPdf(blob, name)) {
+        setStatus('Reading PDF…');
+        const { readPdf } = await import('./pdf.js');
+        const { canvas: page, pages, textSegments } = await readPdf(blob);
+        const pageNote = pages > 1 ? ` Showing page 1 of ${pages}.` : '';
+        setSource(page, name, {
+          text: textSegments,
+          note: textSegments
+            ? `Digital PDF: ${textSegments.length} text segments found in the file, so OCR isn't needed.${pageNote} You can still pick an OCR engine to compare.`
+            : `Scanned PDF (no text layer): it will go through OCR.${pageNote}`,
+        });
+      } else if (blob.type.startsWith('image/')) {
+        setSource(await imageToCanvas(blob), name);
+      } else {
+        setStatus('Unsupported file. Use an image (JPG, PNG, WebP) or a PDF.', true);
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus(`Couldn't open that file: ${err.message ?? err}`, true);
+    }
   }
 
   async function loadSample(button) {
     root.querySelectorAll('[data-sample]').forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
     const res = await fetch(button.dataset.sample);
-    await loadImage(await res.blob(), button.dataset.name);
+    await loadFile(await res.blob(), button.dataset.name);
   }
 
   root.querySelectorAll('[data-sample]').forEach((b) => b.addEventListener('click', () => !busy && loadSample(b)));
   fileInput.addEventListener('change', async () => {
     const file = fileInput.files?.[0];
     if (!file || busy) return;
-    if (!file.type.startsWith('image/')) return setStatus('Images only (JPG, PNG, WebP). For a PDF, take a screenshot.', true);
     root.querySelectorAll('[data-sample]').forEach((b) => b.setAttribute('aria-pressed', 'false'));
-    await loadImage(file, file.name);
+    await loadFile(file, file.name);
+    fileInput.value = '';
   });
-
-  root.querySelectorAll('[name="engine"]').forEach((input) =>
-    input.addEventListener('change', () => {
-      engine = input.value;
-    }),
-  );
 
   // ---------- run ----------
 
@@ -100,8 +139,10 @@ export function mountDemo(root, { onBusy = () => {} } = {}) {
     const { label, size, load } = ENGINES[engine];
     try {
       setProgress(0.02);
-      setStatus(`Loading ${label} (${size}, cached after the first run)…`);
-      const [recognize, { extractInvoice }] = await Promise.all([load(), import('./extract.js')]);
+      setStatus(load ? `Loading ${label} (${size}, cached after the first run)…` : 'Reading the PDF text layer…');
+      // a digital PDF's own text layer stands in for OCR: exact text, exact positions
+      const textLayer = async () => ({ segments: pdfText, width: source.width, height: source.height });
+      const [recognize, { extractInvoice }] = await Promise.all([load ? load() : textLayer, import('./extract.js')]);
       const t0 = performance.now();
       let lastPaint = 0;
       const ocr = await recognize(source, {

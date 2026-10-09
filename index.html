@@ -225,12 +225,12 @@
         <!-- DEMO -->
         <section id="demo" class="panel panel--demo" tabindex="-1" aria-labelledby="demo-title">
           <div class="demo" data-demo>
-            <div class="demo__side" data-reveal>
+            <div class="demo__side" data-reveal data-scroll-y>
               <p class="kicker">04 / Live demo</p>
               <h2 id="demo-title">Invoice extraction,<br /><span class="accent">in your browser</span></h2>
               <p class="demo__intro">
                 OCR finds every text segment, a regex pull and an NLP pull read the fields, and
-                table detection rebuilds the line items, then checks the maths. Nothing is uploaded.
+                table detection rebuilds the line items, then checks the maths. Works with photos, scans and PDFs. Nothing is uploaded.
               </p>
 
               <p class="label">1. Pick an invoice</p>
@@ -244,14 +244,18 @@
                 <button type="button" class="demo__sample" data-sample="demo/invoice-greenleaf.jpg" data-name="Greenleaf (EU, IBAN)" aria-pressed="false">
                   <img src="demo/invoice-greenleaf.jpg" alt="" width="60" height="54" loading="lazy" decoding="async" /><span>Greenleaf</span>
                 </button>
+                <button type="button" class="demo__sample" data-sample="demo/invoice-atlas.pdf" data-name="Atlas (digital PDF)" aria-pressed="false">
+                  <span class="demo__pdf" aria-hidden="true"><img src="demo/invoice-atlas.jpg" alt="" width="60" height="54" loading="lazy" decoding="async" /><i>PDF</i></span><span>Atlas PDF</span>
+                </button>
                 <label class="demo__sample demo__sample--upload">
-                  <input type="file" accept="image/*" data-upload />
-                  <span class="demo__plus" aria-hidden="true">+</span><span>Your own</span>
+                  <input type="file" accept="image/*,application/pdf,.pdf" data-upload />
+                  <span class="demo__plus" aria-hidden="true">+</span><span>Image / PDF</span>
                 </label>
               </div>
 
               <p class="label">2. Choose an OCR engine</p>
               <div class="demo__engines" role="radiogroup" aria-label="OCR engine">
+                <label hidden><input type="radio" name="engine" value="pdf" disabled /><span><b>PDF text layer</b> Exact text from the file · no OCR, no download</span></label>
                 <label><input type="radio" name="engine" value="paddle" checked /><span><b>PaddleOCR</b> PP-OCRv5 · ≈10 MB · best for tables</span></label>
                 <label><input type="radio" name="engine" value="tesseract" /><span><b>Tesseract</b> v5 LSTM · ≈4 MB · lighter</span></label>
               </div>
