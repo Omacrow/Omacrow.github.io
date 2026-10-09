@@ -18,12 +18,20 @@ npm run preview   # serve the build
 
 ## Colour themes
 
-Three palettes: `gold` (default), `amethyst` and `crimson`. Visitors switch with the diamonds in the
+Three palettes: `amethyst` (default), `gold` and `crimson`. Visitors switch with the colour swatches in the
 top bar, and their pick is remembered. `?theme=crimson` in the URL forces one.
 
 - Change the default: `data-theme` on `<html>` in `index.html`.
 - Edit or add a palette: the `[data-theme='…']` blocks in `src/style.css` **and** `WORLD_THEMES` in
   `src/world.js` (the 3D island), plus a button in the `.themes` group.
+
+## Game
+
+The last panel is a small Geometry Dash–style runner (`src/game/dash.js`): 2D canvas, fixed-timestep
+physics, procedural obstacle patterns and a speed ramp. Space / ↑ / click or tap to jump, hold to keep
+jumping. After a crash the player chooses whether to save the run; saved runs are kept in
+`localStorage` as AES-GCM encrypted JSON (`src/game/scores.js`). The key ships with the page, so this
+deters casual edits rather than determined cheating; a shared leaderboard would need a server.
 
 ## CV
 

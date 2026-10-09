@@ -109,8 +109,8 @@ function softDotTexture() {
   return tex;
 }
 
-export function createWorld(canvas, { reducedMotion = false, theme = 'gold', progress = 0, intro: playIntro = true } = {}) {
-  const PALETTE = { ...BASE, ...(WORLD_THEMES[theme] ?? WORLD_THEMES.gold) };
+export function createWorld(canvas, { reducedMotion = false, theme = 'amethyst', progress = 0, intro: playIntro = true } = {}) {
+  const PALETTE = { ...BASE, ...(WORLD_THEMES[theme] ?? WORLD_THEMES.amethyst) };
   const rand = mulberry32(1337);
   const range = (a, b) => lerp(a, b, rand());
   const isSmall = () => window.matchMedia('(max-width: 900px)').matches;

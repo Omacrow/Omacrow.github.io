@@ -2,8 +2,10 @@ import './style.css';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+import { installRetroCursor } from './cursor.js';
 
 gsap.registerPlugin(ScrollTrigger);
+installRetroCursor();
 
 const root = document.documentElement;
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -13,6 +15,59 @@ const panels = [...document.querySelectorAll('.panel')];
 const navLinks = [...document.querySelectorAll('.topbar nav a')];
 const bar = document.querySelector('.progress span');
 const counterNow = document.querySelector('.counter__now');
+
+// ---------- marquees ----------
+
+// A second, hidden copy of each track makes the CSS loop seamless.
+document.querySelectorAll('.marquee').forEach((marquee) => {
+  const copy = marquee.querySelector('.marquee__track').cloneNode(true);
+  copy.setAttribute('aria-hidden', 'true');
+  marquee.append(copy);
+});
+
+// ---------- card highlight ----------
+
+document.querySelectorAll('.card').forEach((card) => {
+  card.addEventListener('pointermove', (e) => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+    card.style.setProperty('--my', `${e.clientY - r.top}px`);
+  });
+});
+
+// ---------- stat count-up ----------
+
+if (!reduced) {
+  const counters = new IntersectionObserver(
+    (entries) => {
+      for (const { target, isIntersecting } of entries) {
+        if (!isIntersecting) continue;
+        counters.unobserve(target);
+        const [, prefix, num, suffix] = target.textContent.match(/^(\D*)([\d.]+)(.*)$/) ?? [];
+        if (!num) continue;
+        const decimals = num.split('.')[1]?.length ?? 0;
+        const value = { n: 0 };
+        gsap.to(value, {
+          n: parseFloat(num),
+          duration: 1.6,
+          ease: 'power3.out',
+          onUpdate: () => (target.textContent = prefix + value.n.toFixed(decimals) + suffix),
+        });
+      }
+    },
+    { threshold: 0.6 },
+  );
+  document.querySelectorAll('.stat dd').forEach((dd) => counters.observe(dd));
+}
+
+// ---------- game ----------
+
+const dashRoot = document.querySelector('[data-dash]');
+if (dashRoot) {
+  import('./game/dash.js')
+    .then(({ mountDash }) => mountDash(dashRoot, { reducedMotion: reduced }))
+    .catch((err) => console.warn('Game failed to load.', err));
+}
 
 // ---------- 3D world ----------
 
