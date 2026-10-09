@@ -82,7 +82,7 @@
 :root {
   --line: rgb(var(--ink-rgb) / 0.1);
   --line-strong: rgb(var(--ink-rgb) / 0.18);
-  --card: rgb(var(--card-rgb) / 0.55);
+  --card: rgb(var(--card-rgb) / 0.82);
 
   --display: 'PP Mori', 'Geist', system-ui, sans-serif;
   --body: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -426,8 +426,6 @@ p {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  -webkit-backdrop-filter: blur(16px) saturate(1.15);
-  backdrop-filter: blur(16px) saturate(1.15);
   transition: border-color 0.35s, transform 0.5s var(--ease);
 }
 
@@ -791,7 +789,8 @@ p {
   list-style: none;
 }
 
-.is-h .panel--work {
+.is-h .panel--work,
+.is-h .panel--stores {
   flex-direction: row;
   align-items: center;
   gap: clamp(40px, 5vw, 80px);
@@ -868,6 +867,92 @@ p {
 .flow i {
   color: var(--accent);
   font-style: normal;
+}
+
+/* ---------- Stores ---------- */
+
+.stores {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Desktop: a two-column grid that scrolls vertically inside the panel, so the list can grow. */
+.is-h .panel--stores {
+  width: 100vw;
+}
+
+.is-h .stores {
+  flex: 1;
+  align-self: stretch;
+  min-width: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: max-content;
+  align-content: start;
+  gap: 18px;
+  padding: 10px 12px 56px 4px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--accent-rgb) / 0.4) transparent;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 16px, #000 calc(100% - 64px), transparent);
+  mask-image: linear-gradient(180deg, transparent 0, #000 16px, #000 calc(100% - 64px), transparent);
+}
+
+.store {
+  padding: 0;
+  overflow: hidden;
+}
+
+.store:hover {
+  transform: translateY(-6px);
+}
+
+.store__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.store img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  transition: transform 0.7s var(--ease);
+}
+
+.store:hover img {
+  transform: scale(1.03);
+}
+
+.store__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--line);
+}
+
+.store__name {
+  white-space: nowrap;
+  color: var(--ink);
+  font: 600 1.2rem var(--display);
+  letter-spacing: -0.01em;
+}
+
+.store__name::after {
+  content: ' ↗';
+  color: var(--accent);
+}
+
+.store__meta {
+  color: var(--muted);
+  font: 500 0.78rem var(--mono);
 }
 
 /* ---------- Skills ---------- */
@@ -1327,6 +1412,8 @@ kbd {
   .work-card {
     min-height: 0;
   }
+
+
 
   .panel--contact {
     padding-bottom: 200px;

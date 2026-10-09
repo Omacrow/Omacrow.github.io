@@ -25,6 +25,23 @@ document.querySelectorAll('.marquee').forEach((marquee) => {
   marquee.append(copy);
 });
 
+// ---------- stores list ----------
+
+// The stores grid scrolls on its own. While it can still move in the wheel's direction, keep the
+// event from Lenis (which would move the page); at either end, let it through so the page continues.
+const storesList = document.querySelector('.stores');
+storesList?.addEventListener(
+  'wheel',
+  (e) => {
+    if (!root.classList.contains('is-h')) return;
+    const { scrollTop, scrollHeight, clientHeight } = storesList;
+    const canScroll =
+      (e.deltaY > 0 && scrollTop + clientHeight < scrollHeight - 1) || (e.deltaY < 0 && scrollTop > 0);
+    if (canScroll) e.stopPropagation();
+  },
+  { passive: true },
+);
+
 // ---------- card highlight ----------
 
 document.querySelectorAll('.card').forEach((card) => {

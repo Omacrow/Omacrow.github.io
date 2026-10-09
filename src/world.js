@@ -121,7 +121,7 @@ export function createWorld(canvas, { reducedMotion = false, theme = 'amethyst',
     alpha: true,
     powerPreference: 'high-performance',
   });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isSmall() ? 1.5 : 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isSmall() ? 1.25 : 1.5));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
   renderer.shadowMap.enabled = !isSmall();
@@ -655,7 +655,7 @@ export function createWorld(canvas, { reducedMotion = false, theme = 'amethyst',
   scene.add(new THREE.HemisphereLight(PALETTE.hemiSky, PALETTE.hemiGround, 0.95));
   const sun = new THREE.DirectionalLight(0xffc27a, 2.6);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.mapSize.set(1024, 1024);
   Object.assign(sun.shadow.camera, { left: -7, right: 7, top: 7, bottom: -7, near: 1, far: 34 });
   sun.shadow.bias = -0.0004;
   sun.shadow.normalBias = 0.03;
@@ -721,11 +721,24 @@ export function createWorld(canvas, { reducedMotion = false, theme = 'amethyst',
   let t = 0;
   let intro = reducedMotion || !playIntro ? 1 : 0;
 
+  // While the camera is settled and the intro is done, only ambient motion (leaves, bobbing) is
+  // left, so render at ~30 fps to save GPU time; scrolling or moving the pointer restores full rate.
+  const IDLE_FRAME = 1 / 30;
+  const isSettled = () =>
+    intro >= 1 &&
+    Math.abs(state.target - state.p) < 1e-4 &&
+    Math.abs(state.tx - state.px) < 1e-3 &&
+    Math.abs(state.ty - state.py) < 1e-3;
+
   function frame(now) {
     raf = requestAnimationFrame(frame);
+    if (document.hidden) {
+      last = now;
+      return;
+    }
+    if (isSettled() && (now - last) / 1000 < IDLE_FRAME - 0.002) return;
     const realDt = Math.min((now - last) / 1000, 1 / 20);
     last = now;
-    if (document.hidden) return;
 
     const dt = reducedMotion ? 0 : realDt;
     t += dt;
