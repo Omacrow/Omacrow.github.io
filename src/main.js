@@ -11,7 +11,7 @@ const root = document.documentElement;
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let canvas = document.getElementById('world');
 const track = document.querySelector('.track');
-const panels = [...document.querySelectorAll('.panel')];
+const panels = [...document.querySelectorAll('.panel')].filter((panel) => !panel.hidden);
 const navLinks = [...document.querySelectorAll('.topbar nav a')];
 const bar = document.querySelector('.progress span');
 const counterNow = document.querySelector('.counter__now');
