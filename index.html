@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en" data-theme="gold">
+  <head>
+    <meta charset="utf-8" />
+    <script>
+      // Theme: ?theme=… in the URL wins, then the visitor's last pick, then data-theme above.
+      (function () {
+        var t = new URLSearchParams(location.search).get('theme');
+        try {
+          t = t || localStorage.getItem('theme');
+        } catch (e) {}
+        if (t === 'gold' || t === 'amethyst' || t === 'crimson') document.documentElement.dataset.theme = t;
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Umer Khan — Senior AI Engineer</title>
+    <meta
+      name="description"
+      content="Umer Khan — Senior AI Engineer with 6+ years building document AI, OCR and automation pipelines, ERP and e-commerce integrations, and high-availability backend systems."
+    />
+    <meta name="theme-color" content="#0d0a07" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Umer Khan — Senior AI Engineer" />
+    <meta
+      property="og:description"
+      content="Document AI, automation and backend systems that run real businesses."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='6' y='6' width='20' height='20' transform='rotate(45 16 16)' fill='%230d0a07' stroke='%23e3b04b' stroke-width='2'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='serif' font-weight='700' font-size='13' fill='%23e3b04b'%3EU%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <div class="sky" aria-hidden="true"></div>
+    <canvas id="world" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a href="#home" class="brand" data-nav aria-label="Umer Khan — home">
+        <b><span>U</span></b>
+        <span class="brand__name">Umer Khan</span>
+      </a>
+      <div class="topbar__right">
+        <nav aria-label="Sections">
+          <ul>
+            <li><a href="#about" data-nav>About</a></li>
+            <li><a href="#experience" data-nav>Experience</a></li>
+            <li><a href="#work" data-nav>Work</a></li>
+            <li><a href="#skills" data-nav>Skills</a></li>
+            <li><a href="#contact" data-nav>Contact</a></li>
+          </ul>
+        </nav>
+        <div class="themes" role="group" aria-label="Colour theme">
+          <button type="button" data-theme-pick="gold" style="--swatch: #e3b04b" aria-label="Gold theme" title="Gold"></button>
+          <button type="button" data-theme-pick="amethyst" style="--swatch: #b78cf5" aria-label="Amethyst theme" title="Amethyst"></button>
+          <button type="button" data-theme-pick="crimson" style="--swatch: #e5554b" aria-label="Crimson theme" title="Crimson"></button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" class="horizontal">
+      <div class="track">
+        <!-- HERO -->
+        <section id="home" class="panel panel--hero" tabindex="-1" aria-label="Introduction">
+          <div class="hero">
+            <p class="kicker" data-intro>Senior AI Engineer · Document AI · Automation</p>
+            <h1 class="hero__title" data-intro>Umer<br />Khan</h1>
+            <p class="lead" data-intro>
+              I build AI systems that run real businesses: document intelligence, automation
+              pipelines and integrations behind platforms serving <em>10,000+ users</em>.
+            </p>
+            <div class="actions" data-intro>
+              <a class="btn btn--accent" href="#work" data-nav>See the work</a>
+              <a class="btn" href="cv.pdf" download>Download CV</a>
+            </div>
+          </div>
+          <p class="scroll-hint" aria-hidden="true">
+            <span class="scroll-hint__h">Scroll to travel</span>
+            <span class="scroll-hint__v">Scroll to explore</span>
+            <span class="scroll-hint__arrow">→</span>
+          </p>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="panel panel--about" tabindex="-1" aria-labelledby="about-title">
+          <div class="about">
+            <div class="about__text" data-reveal>
+              <p class="kicker">01 — The path so far</p>
+              <h2 id="about-title">
+                Backend engineer by trade.<br />
+                <span class="accent">AI engineer by focus.</span>
+              </h2>
+              <p>
+                For 6+ years I've built the systems underneath finance, logistics, ERP and
+                e-commerce operations: the async pipelines, distributed locks and retry logic that
+                keep transactions moving when nobody is watching.
+              </p>
+              <p>
+                Today I'm a Senior AI Engineer at Panni Management Corp, turning OCR, NLP and
+                computer vision into automation that replaces hours of manual work, and connecting
+                the ERPs, stores and tools businesses run on.
+              </p>
+              <p class="edu">
+                <span class="label">Education</span>
+                BSc Computer Science (in progress) — University of London, Goldsmiths
+              </p>
+            </div>
+            <dl class="stats" data-reveal>
+              <div class="stat card"><dt>Years shipping production systems</dt><dd>6+</dd></div>
+              <div class="stat card"><dt>Production applications delivered</dt><dd>25+</dd></div>
+              <div class="stat card"><dt>Users on systems I've built</dt><dd>10k+</dd></div>
+              <div class="stat card"><dt>Operational transactions processed</dt><dd>$1M+</dd></div>
+              <div class="stat card stat--wide"><dt>Uptime on AWS-deployed backends</dt><dd>99.9%</dd></div>
+            </dl>
+          </div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section id="experience" class="panel panel--exp" tabindex="-1" aria-labelledby="exp-title">
+          <div class="section-head" data-reveal>
+            <p class="kicker">02 — Experience</p>
+            <h2 id="exp-title">Where I've worked</h2>
+          </div>
+          <ol class="timeline">
+            <li class="job card" data-reveal>
+              <span class="job__dot" aria-hidden="true"></span>
+              <p class="job__when">2023 — Present</p>
+              <h3>Senior AI Engineer</h3>
+              <p class="job__where">Panni Management Corp · Canada (Remote)</p>
+              <ul>
+                <li>Build AI-powered document processing with OCR, computer vision and ML integrations that automate enterprise workflows end to end.</li>
+                <li>Engineered concurrent pipelines, distributed workers and Redis-based locking for transactional, mission-critical workflows.</li>
+                <li>Deploy and run backend services on Docker, Kubernetes and AWS for 10,000+ users.</li>
+              </ul>
+              <p class="tags">Python · Django · OCR · LLMs · Redis · Kubernetes · AWS</p>
+            </li>
+            <li class="job card" data-reveal>
+              <span class="job__dot" aria-hidden="true"></span>
+              <p class="job__when">2021 — 2023</p>
+              <h3>Senior Software Engineer</h3>
+              <p class="job__where">AIMVIZ Pvt Ltd</p>
+              <ul>
+                <li>Designed backend and full-stack applications for enterprise and customer-facing products.</li>
+                <li>Integrated ERP systems and third-party platforms through REST, SOAP and GraphQL APIs.</li>
+                <li>Built event-driven workflows and background processing to scale business operations.</li>
+              </ul>
+              <p class="tags">Python · Django · React · Node.js · PHP · GraphQL · SQL</p>
+            </li>
+            <li class="job card" data-reveal>
+              <span class="job__dot" aria-hidden="true"></span>
+              <p class="job__when">2019 — 2020</p>
+              <h3>Software Engineer</h3>
+              <p class="job__where">S2F Lab Pvt Ltd</p>
+              <ul>
+                <li>Developed backend features for enterprise web platforms and CMS-based systems.</li>
+                <li>Worked on API development, database schema design and third-party integrations.</li>
+                <li>Built reusable frontend and backend components to speed up delivery.</li>
+              </ul>
+              <p class="tags">Backend · APIs · SQL · Integrations</p>
+            </li>
+          </ol>
+        </section>
+
+        <!-- WORK -->
+        <section id="work" class="panel panel--work" tabindex="-1" aria-labelledby="work-title">
+          <div class="work-head" data-reveal>
+            <p class="kicker">03 — Selected work</p>
+            <h2 id="work-title">Systems I've<br /><span class="accent">built and shipped</span></h2>
+            <p>
+              Most of this work lives behind company walls, so here's what each system does and
+              how it's put together.
+            </p>
+          </div>
+          <ul class="cards">
+            <li class="work-card card" data-reveal>
+              <span class="work-card__num">01</span>
+              <p class="work-card__metric">−60%</p>
+              <p class="work-card__metric-label">manual processing time</p>
+              <h3>AP Automation &amp; OCR</h3>
+              <p>Accounts-payable automation that reads incoming invoices with OCR, extracts and validates the data, and posts it into finance systems. Async workers with locking and retries keep every record consistent.</p>
+              <p class="flow" aria-label="Pipeline">Invoice <i>→</i> OCR <i>→</i> Validation <i>→</i> ERP</p>
+              <p class="tags">Python · Django · OCR · Redis · Worker Queues</p>
+            </li>
+            <li class="work-card card" data-reveal>
+              <span class="work-card__num">02</span>
+              <p class="work-card__metric">+40%</p>
+              <p class="work-card__metric-label">operational efficiency</p>
+              <h3>ERP &amp; E-commerce Integrations</h3>
+              <p>Automations connecting ERPs with e-commerce stores and the rest of a business's software, syncing orders, products and financial data through n8n, Zapier, webhooks and custom APIs.</p>
+              <p class="flow" aria-label="Pipeline">Store <i>→</i> Webhook <i>→</i> n8n / Zapier <i>→</i> ERP</p>
+              <p class="tags">n8n · Zapier · Webhooks · REST · GraphQL · SOAP</p>
+            </li>
+            <li class="work-card card" data-reveal>
+              <span class="work-card__num">03</span>
+              <p class="work-card__metric">OCR + NLP</p>
+              <p class="work-card__metric-label">documents and live camera</p>
+              <h3>Document Ingestion &amp; Product Vision</h3>
+              <p>AI ingestion for invoices and documents, plus camera-based detection of products, allergens and attributes. Tesseract and regex pull structured fields, GLiNER extracts entities, and custom Hugging Face models cover the domain-specific cases.</p>
+              <p class="flow" aria-label="Pipeline">Camera / PDF <i>→</i> Tesseract + Regex <i>→</i> GLiNER <i>→</i> HF Models</p>
+              <p class="tags">Python · Tesseract · GLiNER · Hugging Face · NLP · Computer Vision</p>
+            </li>
+          </ul>
+        </section>
+
+        <!-- SKILLS -->
+        <section id="skills" class="panel panel--skills" tabindex="-1" aria-labelledby="skills-title">
+          <div class="section-head" data-reveal>
+            <p class="kicker">04 — Skills</p>
+            <h2 id="skills-title">The toolkit</h2>
+          </div>
+          <div class="skills">
+            <div class="skill card" data-reveal>
+              <h3>AI &amp; Document Intelligence</h3>
+              <ul class="chips">
+                <li>LLMs</li><li>OpenAI API</li><li>Hugging Face</li><li>GLiNER</li><li>NLP</li>
+                <li>Tesseract OCR</li><li>Computer Vision</li><li>Prompt Engineering</li>
+              </ul>
+            </div>
+            <div class="skill card" data-reveal>
+              <h3>Integrations &amp; Automation</h3>
+              <ul class="chips">
+                <li>n8n</li><li>Zapier</li><li>Webhooks</li><li>REST</li><li>GraphQL</li><li>SOAP</li>
+                <li>ERP Integration</li><li>E-commerce Platforms</li>
+              </ul>
+            </div>
+            <div class="skill card" data-reveal>
+              <h3>Backend</h3>
+              <ul class="chips">
+                <li>Python</li><li>Django / DRF</li><li>FastAPI</li><li>Flask</li><li>Node.js</li>
+                <li>Express</li><li>PHP</li>
+              </ul>
+            </div>
+            <div class="skill card" data-reveal>
+              <h3>Distributed Systems</h3>
+              <ul class="chips">
+                <li>Event-Driven Architecture</li><li>Microservices</li><li>Async Processing</li>
+                <li>Worker Queues</li><li>Distributed Locking</li><li>Rate Limiting</li><li>Fault Tolerance</li>
+              </ul>
+            </div>
+            <div class="skill card" data-reveal>
+              <h3>Data</h3>
+              <ul class="chips">
+                <li>PostgreSQL</li><li>MySQL</li><li>MongoDB</li><li>Redis</li>
+                <li>Schema Design</li><li>Query Optimisation</li>
+              </ul>
+            </div>
+            <div class="skill card" data-reveal>
+              <h3>Cloud &amp; DevOps</h3>
+              <ul class="chips">
+                <li>AWS (EC2, S3, ELB)</li><li>Docker</li><li>Kubernetes</li><li>Linux</li>
+                <li>Nginx</li><li>CI/CD</li><li>Observability</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="panel panel--contact" tabindex="-1" aria-labelledby="contact-title">
+          <div class="contact" data-reveal>
+            <p class="kicker">05 — Contact</p>
+            <h2 id="contact-title" class="contact__title">
+              Let's build something<br /><span class="accent">worth exploring.</span>
+            </h2>
+            <p>Open to senior AI, automation and backend roles.</p>
+            <a class="mail" href="mailto:omercfc38@gmail.com">omercfc38@gmail.com</a>
+            <ul class="links">
+              <li><a href="https://github.com/Omacrow" rel="noopener" target="_blank">GitHub</a></li>
+              <li><a href="https://www.linkedin.com/in/umer-khan-0a060b23b/" rel="noopener" target="_blank">LinkedIn</a></li>
+              <li><a href="cv.pdf" download>CV (PDF)</a></li>
+            </ul>
+            <p class="footnote">
+              The island is generated entirely in code with Three.js. No 3D assets were used.
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div class="progress" aria-hidden="true"><span></span></div>
+    <p class="counter" aria-hidden="true"><span class="counter__now">01</span> / 06</p>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
