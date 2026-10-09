@@ -54,6 +54,7 @@
             <li><a href="#about" data-nav>About</a></li>
             <li><a href="#experience" data-nav>Experience</a></li>
             <li><a href="#work" data-nav>Work</a></li>
+            <li><a href="#demo" data-nav>Demo</a></li>
             <li><a href="#skills" data-nav>Skills</a></li>
             <li><a href="#contact" data-nav>Contact</a></li>
           </ul>
@@ -78,7 +79,7 @@
               integrations behind platforms serving <em>10,000+ users</em>.
             </p>
             <div class="actions" data-intro>
-              <a class="btn btn--accent" href="#work" data-nav>See the work</a>
+              <a class="btn btn--accent" href="#demo" data-nav>Try the live demo</a>
               <a class="btn" href="cv.pdf" download>Download CV</a>
             </div>
           </div>
@@ -221,6 +222,72 @@
           </ul>
         </section>
 
+        <!-- DEMO -->
+        <section id="demo" class="panel panel--demo" tabindex="-1" aria-labelledby="demo-title">
+          <div class="demo" data-demo>
+            <div class="demo__side" data-reveal>
+              <p class="kicker">04 / Live demo</p>
+              <h2 id="demo-title">Invoice extraction,<br /><span class="accent">in your browser</span></h2>
+              <p class="demo__intro">
+                OCR finds every text segment, a regex pull and an NLP pull read the fields, and
+                table detection rebuilds the line items, then checks the maths. Nothing is uploaded.
+              </p>
+
+              <p class="label">1. Pick an invoice</p>
+              <div class="demo__samples">
+                <button type="button" class="demo__sample" data-sample="demo/invoice-northwind.jpg" data-name="Northwind (UK, VAT)" aria-pressed="false">
+                  <img src="demo/invoice-northwind.jpg" alt="" width="60" height="54" loading="lazy" decoding="async" /><span>Northwind</span>
+                </button>
+                <button type="button" class="demo__sample" data-sample="demo/invoice-atlas.jpg" data-name="Atlas (US, sales tax)" aria-pressed="false">
+                  <img src="demo/invoice-atlas.jpg" alt="" width="60" height="54" loading="lazy" decoding="async" /><span>Atlas</span>
+                </button>
+                <button type="button" class="demo__sample" data-sample="demo/invoice-greenleaf.jpg" data-name="Greenleaf (EU, IBAN)" aria-pressed="false">
+                  <img src="demo/invoice-greenleaf.jpg" alt="" width="60" height="54" loading="lazy" decoding="async" /><span>Greenleaf</span>
+                </button>
+                <label class="demo__sample demo__sample--upload">
+                  <input type="file" accept="image/*" data-upload />
+                  <span class="demo__plus" aria-hidden="true">+</span><span>Your own</span>
+                </label>
+              </div>
+
+              <p class="label">2. Choose an OCR engine</p>
+              <div class="demo__engines" role="radiogroup" aria-label="OCR engine">
+                <label><input type="radio" name="engine" value="paddle" checked /><span><b>PaddleOCR</b> PP-OCRv5 · ≈10 MB · best for tables</span></label>
+                <label><input type="radio" name="engine" value="tesseract" /><span><b>Tesseract</b> v5 LSTM · ≈4 MB · lighter</span></label>
+              </div>
+
+              <div class="demo__run">
+                <button type="button" class="btn btn--accent btn--plain" data-run disabled>Run extraction</button>
+                <button type="button" class="btn btn--plain" data-download hidden>Download JSON</button>
+              </div>
+              <div class="demo__progress" data-progress aria-hidden="true"><span></span></div>
+              <p class="demo__status" data-status aria-live="polite">Loading sample…</p>
+            </div>
+
+            <div class="demo__stage card" data-reveal>
+              <div class="demo__viewer" data-scroll-y>
+                <canvas class="demo__canvas" aria-label="Invoice with detected text segments and table overlay"></canvas>
+              </div>
+              <div class="demo__results" data-results>
+                <div class="demo__tabs" role="tablist" aria-label="Extraction results">
+                  <button type="button" role="tab" aria-selected="true" aria-controls="demo-items">Line items</button>
+                  <button type="button" role="tab" aria-selected="false" aria-controls="demo-regex">Regex</button>
+                  <button type="button" role="tab" aria-selected="false" aria-controls="demo-nlp">NLP</button>
+                  <button type="button" role="tab" aria-selected="false" aria-controls="demo-checks">Checks</button>
+                  <button type="button" role="tab" aria-selected="false" aria-controls="demo-raw">Raw OCR</button>
+                </div>
+                <div class="demo__panels" data-scroll-y>
+                  <div id="demo-items" role="tabpanel"></div>
+                  <div id="demo-regex" role="tabpanel" hidden></div>
+                  <div id="demo-nlp" role="tabpanel" hidden></div>
+                  <div id="demo-checks" role="tabpanel" hidden></div>
+                  <div id="demo-raw" role="tabpanel" hidden></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <!-- STORES (hidden for now: remove the hidden attribute and restore the nav link to show it) -->
         <section id="stores" class="panel panel--stores" hidden tabindex="-1" aria-labelledby="stores-title">
           <div class="work-head" data-reveal>
@@ -280,7 +347,7 @@
         <!-- SKILLS -->
         <section id="skills" class="panel panel--skills" tabindex="-1" aria-labelledby="skills-title">
           <div class="section-head" data-reveal>
-            <p class="kicker">04 / Skills</p>
+            <p class="kicker">05 / Skills</p>
             <h2 id="skills-title">The toolkit</h2>
           </div>
           <div class="skills">
@@ -326,7 +393,7 @@
         <!-- CONTACT -->
         <section id="contact" class="panel panel--contact" tabindex="-1" aria-labelledby="contact-title">
           <div class="contact" data-reveal>
-            <p class="kicker">05 / Contact</p>
+            <p class="kicker">06 / Contact</p>
             <h2 id="contact-title" class="contact__title">
               Let's build something<br /><span class="accent">worth exploring.</span>
             </h2>
@@ -350,7 +417,7 @@
         <section id="play" class="panel panel--play" tabindex="-1" aria-labelledby="play-title">
           <div class="play">
             <div class="play__head" data-reveal>
-              <p class="kicker">06 / Play</p>
+              <p class="kicker">07 / Play</p>
               <h2 id="play-title">Made it to the end?<br /><span class="accent">Have a run.</span></h2>
               <p class="play__keys">
                 <span class="keys-pointer"><kbd>Space</kbd> <kbd>↑</kbd> or click to jump.</span>
@@ -384,7 +451,7 @@
     </main>
 
     <div class="progress" aria-hidden="true"><span></span></div>
-    <p class="counter" aria-hidden="true"><span class="counter__now">01</span> / 07</p>
+    <p class="counter" aria-hidden="true"><span class="counter__now">01</span> / 08</p>
 
     <script type="module" src="/src/main.js"></script>
   </body>

@@ -717,6 +717,7 @@ export function createWorld(canvas, { reducedMotion = false, theme = 'amethyst',
   // ---------- loop ----------
 
   let raf = 0;
+  let paused = false; // e.g. while the OCR demo is using the CPU
   let last = performance.now();
   let t = 0;
   let intro = reducedMotion || !playIntro ? 1 : 0;
@@ -732,7 +733,7 @@ export function createWorld(canvas, { reducedMotion = false, theme = 'amethyst',
 
   function frame(now) {
     raf = requestAnimationFrame(frame);
-    if (document.hidden) {
+    if (document.hidden || paused) {
       last = now;
       return;
     }
@@ -762,6 +763,9 @@ export function createWorld(canvas, { reducedMotion = false, theme = 'amethyst',
   return {
     setProgress(p) {
       state.target = clamp01(p);
+    },
+    setPaused(value) {
+      paused = Boolean(value);
     },
     setPointer(x, y) {
       if (reducedMotion) return;

@@ -25,6 +25,21 @@ top bar, and their pick is remembered. `?theme=crimson` in the URL forces one.
 - Edit or add a palette: the `[data-theme='…']` blocks in `src/style.css` **and** `WORLD_THEMES` in
   `src/world.js` (the 3D island), plus a button in the `.themes` group.
 
+## Live demo: invoice extraction
+
+Runs entirely in the browser; invoices never leave the device. Code in `src/demo/`.
+
+| Stage | How |
+| --- | --- |
+| OCR | **PaddleOCR** (PP-OCRv3 det + PP-OCRv5 English rec, ONNX, ~10 MB) on onnxruntime-web, with a small custom pipeline (`paddle.js`): DBNet probability map → connected regions → unclipped boxes → SVTR recognition → CTC decoding. **Tesseract.js** (~4 MB) as a lighter alternative. Both output text segments with boxes. |
+| Regex pull | A catalogue of labelled fields (invoice no., dates, PO, terms, subtotal / tax / shipping / discount / total, bank details, tax IDs…) with many label variants, plus label-free patterns (emails, phones, websites, IBAN with mod-97 check, VAT IDs, postcodes). |
+| NLP pull | `compromise` for people and places, a company-suffix rule for organisations, and a layout rule for the customer ("Bill To"). |
+| Table detection | Header row → column bands → rows clustered by position → line items, with wrapped descriptions merged. Falls back to a row-pattern detector when no header is readable. |
+| Checks and repair | qty × price = amount, lines = subtotal, subtotal + tax = total, due ≥ issue date. Misread numbers are repaired only when the maths proves the fix (dropped decimal point, digit confirmed by the subtotal), and every repair is shown. |
+
+Models and runtimes load from jsDelivr / Hugging Face only when someone presses Run, and are cached afterwards.
+Sample invoices (fictional companies) are rendered by `node scripts/build-samples.mjs` into `public/demo/`.
+
 ## Game
 
 The last panel is a small Geometry Dash–style runner (`src/game/dash.js`): 2D canvas, fixed-timestep

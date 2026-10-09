@@ -25,22 +25,33 @@ document.querySelectorAll('.marquee').forEach((marquee) => {
   marquee.append(copy);
 });
 
-// ---------- stores list ----------
+// ---------- inner scroll areas ----------
 
-// The stores grid scrolls on its own. While it can still move in the wheel's direction, keep the
-// event from Lenis (which would move the page); at either end, let it through so the page continues.
-const storesList = document.querySelector('.stores');
-storesList?.addEventListener(
-  'wheel',
-  (e) => {
-    if (!root.classList.contains('is-h')) return;
-    const { scrollTop, scrollHeight, clientHeight } = storesList;
-    const canScroll =
-      (e.deltaY > 0 && scrollTop + clientHeight < scrollHeight - 1) || (e.deltaY < 0 && scrollTop > 0);
-    if (canScroll) e.stopPropagation();
-  },
-  { passive: true },
+// Some areas scroll on their own (stores grid, demo viewer and results). While one can still move in
+// the wheel's direction, keep the event from Lenis (which would move the page); at either end, let
+// it through so the page continues.
+document.querySelectorAll('.stores, [data-scroll-y]').forEach((area) =>
+  area.addEventListener(
+    'wheel',
+    (e) => {
+      if (!root.classList.contains('is-h')) return;
+      const { scrollTop, scrollHeight, clientHeight } = area;
+      const canScroll =
+        (e.deltaY > 0 && scrollTop + clientHeight < scrollHeight - 1) || (e.deltaY < 0 && scrollTop > 0);
+      if (canScroll) e.stopPropagation();
+    },
+    { passive: true },
+  ),
 );
+
+// ---------- live demo ----------
+
+const demoRoot = document.querySelector('[data-demo]');
+if (demoRoot) {
+  import('./demo/demo.js')
+    .then(({ mountDemo }) => mountDemo(demoRoot, { onBusy: (busy) => world?.setPaused(busy) }))
+    .catch((err) => console.warn('Demo failed to load.', err));
+}
 
 // ---------- card highlight ----------
 
